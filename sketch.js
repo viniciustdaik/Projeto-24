@@ -7,17 +7,26 @@ var engine, world;
 var canvas;
 var palyer, playerBase, playerArcher;
 var playerArrows = [];
-
+var upbutton, upbuttonimg, 
+downbutton, downbuttonimg;
 
 function preload() {
   backgroundImg = loadImage("./assets/background.png");
   baseimage = loadImage("./assets/base.png");
   playerimage = loadImage("./assets/player.png");
+  upbuttonimg = loadImage("./assets/up_arrow.png");
+  downbuttonimg = loadImage("./assets/down_arrow.png");
 }
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-
+  
+  //upbutton = createSprite(width/2-85, height-55, 15, 15);
+  //upbutton.addImage("uparrowimg", upbuttonimg);
+  
+  //downbutton = createSprite(width/2+85, height-55, 15, 15);
+  //downbutton.addImage("down_arrowimg", downbuttonimg);
+  
   engine = Engine.create();
   world = engine.world;
 
