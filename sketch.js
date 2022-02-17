@@ -3,51 +3,63 @@ const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
-  
-
 var engine, world;
 var canvas;
 var palyer, playerBase, playerArcher;
 var playerArrows = [];
-var board1, board2;
-var numberOfArrows = 10;
+var upbutton, upbuttonimg, 
+downbutton, downbuttonimg;
 
 function preload() {
   backgroundImg = loadImage("./assets/background.png");
+  baseimage = loadImage("./assets/base.png");
+  playerimage = loadImage("./assets/player.png");
+  upbuttonimg = loadImage("./assets/up_arrow.png");
+  downbuttonimg = loadImage("./assets/down_arrow.png");
 }
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-
+  
+  //upbutton = createSprite(width/2-85, height-55, 15, 15);
+  //upbutton.addImage("uparrowimg", upbuttonimg);
+  
+  //downbutton = createSprite(width/2+85, height-55, 15, 15);
+  //downbutton.addImage("down_arrowimg", downbuttonimg);
+  
   engine = Engine.create();
   world = engine.world;
 
-  playerBase = new PlayerBase(300, 500, 180, 150);
-  player = new Player(285, playerBase.body.position.y - 153, 50, 180);
+  angleMode(DEGREES);
+
+  var options = {
+    isStatic: true
+  };
+
+  playerBase = Bodies.rectangle(200, 350, 180, 150, options);
+  World.add(world, playerBase);
+
+  player = Bodies.rectangle(250, playerBase.position.y - 160, 50, 180, options);
+  World.add(world,player)
+
   playerArcher = new PlayerArcher(
     340,
-    playerBase.body.position.y - 180,
+    playerBase.position.y - 112,
     120,
     120
   );
-
-  board1 = new Board(Math.round(random(width - 300, width-80)), 330, 50, 200);//width - 300
-  board2 = new Board(Math.round(random(width - 550, width - 350)), height - 300, 50, 200);//width - 550
 }
 
 function draw() {
   background(backgroundImg);
 
   Engine.update(engine);
+  image(baseimage,playerBase.position.x,playerBase.position.y,180,150)
+  image(playerimage,player.position.x,player.position.y,50,180)
 
-  playerBase.display();
-  player.display();
   playerArcher.display();
 
-  board1.display();
-  board2.display();
-
-  for (var i = 0; i < playerArrows.length; i++) {
+   for (var i = 0; i < playerArrows.length; i++) {
     if (playerArrows[i] !== undefined) {
       playerArrows[i].display();
     }
@@ -59,31 +71,33 @@ function draw() {
   textAlign("center");
   textSize(40);
   text("ARQUEIRO ÉPICO", width / 2, 100);
-
-  // Contagem de Flechas
-  fill('gold');
-  stroke('green');
-  textAlign("center");
-  textSize(30);
-  text("Flechas Restantes: " + numberOfArrows, 200, 100);
 }
 
-function keyPressed() {
+/*function keyPressed(){
    if (keyCode === 32) {
-    if (numberOfArrows > 0) {
-      var posX = playerArcher.body.position.x;
-      var posY = playerArcher.body.position.y;
-      var angle = playerArcher.body.angle;
-
-      var arrow = new PlayerArrow(posX, posY, 100, 10, angle);
-
-      Matter.Body.setAngle(arrow.body, angle);
-      playerArrows.push(arrow);
-     numberOfArrows -= 1;
-    }
+    var posX = playerArcher.body.position.x;
+    var posY = playerArcher.body.position.y;
+    var angle = playerArcher.body.angle;
+    var arrow = new PlayerArrow(posX, posY, 100, 10, angle);
+    
+    Matter.Body.setAngle(arrow.body, angle);
+    playerArrows.push(arrow);
   }
+}*/
 
+
+function keyPressed(){
+  if (keyCode === 32) {
+    var posX = playerArcher.body.position.x;
+    var posY = playerArcher.body.position.y;
+    var angle = playerArcher.body.angle;
+    var arrow = new PlayerArrow(posX, posY, 100, 10, angle);
+    
+    Matter.Body.setAngle(arrow.body, angle);
+    playerArrows.push(arrow);
+  }
 }
+
 
 function keyReleased() {
   if (keyCode === 32) {
